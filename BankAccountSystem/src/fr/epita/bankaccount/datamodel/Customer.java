@@ -9,11 +9,15 @@ import java.util.List;
  * @author tbrou
  *
  */
+//public: every class can "see" this class
 public class Customer { 
 
+	//private : no access outside of the class
 	private String name;
 	private String address;
 
+	//accounts is a property which is declared as "package protected" 
+	//only classes of the same package can have access to this value
 	List<Account> accounts;
 
 	/**
