@@ -1,9 +1,11 @@
 /**
  * 
  */
-package fr.tbr.iam.launcher;
+package fr.epita.iam.launcher;
 
 import java.util.Scanner;
+
+import fr.epita.iam.services.Authenticator;
 
 /**
  * @author tbrou
@@ -20,9 +22,12 @@ public class Launcher {
 	
 		Scanner scanner = new Scanner(System.in);
 		
- 
+		System.out.println("User name :");
+		String userName = scanner.nextLine();
+		System.out.println("Password :");
+		String password = scanner.nextLine();
 		
-		if (!authenticate(scanner)) {
+		if (!Authenticator.authenticate(userName, password)) {
 			return;
 		} else {
 			// We are authenticated
@@ -70,21 +75,5 @@ public class Launcher {
 
 	}
 
-	/**
-	 * @param scanner
-	 * @return
-	 */
-	private static boolean authenticate(Scanner scanner) {
-		System.out.println("User name :");
-		String userName = scanner.nextLine();
-		System.out.println("Password :");
-		String password = scanner.nextLine();
-//		if ("adm".equals(userName) && "pwd".equals(password)){
-//			authenticated = true;
-//		}else{
-//			authenticated = false;
-//		}
-		return "adm".equals(userName) && "pwd".equals(password);
-	}
 
 }
