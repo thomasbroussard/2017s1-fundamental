@@ -80,7 +80,6 @@ public class FileIdentityDAO {
 	 */
 	public void save(Identity identity) {
 
-		
 		this.printer.println("--- Identity ---");
 		this.printer.println(identity.getUid());
 		this.printer.println(identity.getDisplayName());
@@ -91,12 +90,20 @@ public class FileIdentityDAO {
 		this.printer.flush();
 	}
 
-
 	public List<Identity> search(Identity criteria) {
 
-		
 		// TODO : complete with a real search
-		return new ArrayList<Identity>();
+		ArrayList<Identity> results = new ArrayList<Identity>();
+		while (this.scanner.hasNext()) {
+			
+			// something before
+			String displayName = this.scanner.nextLine();
+			// something after
+
+			// replace "" by real values
+			results.add(new Identity(displayName, "", ""));
+		}
+		return results;
 
 	}
 
