@@ -4,11 +4,13 @@
 package fr.epita.iam.services;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import fr.epita.iam.datamodel.Identity;
 
@@ -21,6 +23,7 @@ import fr.epita.iam.datamodel.Identity;
 public class FileIdentityDAO {
 
 	private PrintWriter printer;
+	private Scanner scanner;
 
 	/**
 	 * 
@@ -29,6 +32,7 @@ public class FileIdentityDAO {
 		// 1 . file initialization
 		File file = new File("/temp/tests/identities.txt");
 		FileWriter writer = null;
+		FileReader reader = null;
 		if (!file.exists()) {
 			// create the directory structure
 			file.getParentFile().mkdirs();
@@ -43,17 +47,19 @@ public class FileIdentityDAO {
 		}
 		try {
 			writer = new FileWriter(file);
+			reader = new FileReader(file);
 		} catch (IOException e) {
 			// TODO : improve so that the code is more readable (avoid a second
 			// try-catch)
 			e.printStackTrace();
 		}
-		if (writer == null) {
+		if (writer == null || reader == null) {
 			// we were not able to open the file in write mode.
 			// TODO be sure to notify the user
 			return;
 		}
-		// 3. writer "augmentation"
+		// 3. writer & reader "augmentation"
+		this.scanner = new Scanner(reader);
 		this.printer = new PrintWriter(writer);
 	}
 
@@ -85,9 +91,10 @@ public class FileIdentityDAO {
 		this.printer.flush();
 	}
 
-	@Deprecated
+
 	public List<Identity> search(Identity criteria) {
 
+		
 		// TODO : complete with a real search
 		return new ArrayList<Identity>();
 
