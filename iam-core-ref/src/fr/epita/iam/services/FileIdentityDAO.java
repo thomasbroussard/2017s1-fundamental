@@ -4,6 +4,7 @@
 package fr.epita.iam.services;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -96,13 +97,25 @@ public class FileIdentityDAO {
 		ArrayList<Identity> results = new ArrayList<Identity>();
 		while (this.scanner.hasNext()) {
 			
-			// something before
+			this.scanner.nextLine();
+			String uid  = this.scanner.nextLine();
 			String displayName = this.scanner.nextLine();
-			// something after
+			String email = this.scanner.nextLine();
+			this.scanner.nextLine();
 
-			// replace "" by real values
-			results.add(new Identity(displayName, "", ""));
+			results.add(new Identity(displayName, uid, email));
 		}
+		//FIXME!
+		//TODO should be handled by a dedicated service
+		this.scanner.close();
+		try {
+			this.scanner = new Scanner(new File("/temp/tests/identities.txt"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 		return results;
 
 	}
