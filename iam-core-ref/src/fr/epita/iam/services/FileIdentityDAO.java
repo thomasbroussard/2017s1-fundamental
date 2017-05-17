@@ -9,6 +9,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -96,17 +97,21 @@ public class FileIdentityDAO {
 		// TODO : complete with a real search
 		ArrayList<Identity> results = new ArrayList<Identity>();
 		while (this.scanner.hasNext()) {
-			
+
 			this.scanner.nextLine();
-			String uid  = this.scanner.nextLine();
+			String uid = this.scanner.nextLine();
 			String displayName = this.scanner.nextLine();
 			String email = this.scanner.nextLine();
 			this.scanner.nextLine();
 
-			results.add(new Identity(displayName, uid, email));
+			Identity identity = new Identity(displayName, uid, email);
+			if (identity.getDisplayName().startsWith(criteria.getDisplayName())) {
+				results.add(identity);
+			}
+
 		}
-		//FIXME!
-		//TODO should be handled by a dedicated service
+		// FIXME!
+		// TODO should be handled by a dedicated service
 		this.scanner.close();
 		try {
 			this.scanner = new Scanner(new File("/temp/tests/identities.txt"));
@@ -114,15 +119,113 @@ public class FileIdentityDAO {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
+
 		return results;
 
 	}
 
 	@Deprecated
-	public void update(Identity identity) {
+	public void update(Identity identity) throws IOException {
+		ArrayList<Identity> results = new ArrayList<Identity>();
+		while (this.scanner.hasNext()) {
 
+			this.scanner.nextLine();
+			String uid = this.scanner.nextLine();
+			String displayName = this.scanner.nextLine();
+			String email = this.scanner.nextLine();
+			this.scanner.nextLine();
+
+			Identity currentIdentity = new Identity(displayName, uid, email);
+			// identity found
+			if (identity.getUid().equals(currentIdentity.getUid())) {
+				results.add(identity);
+			} else {
+				results.add(currentIdentity);
+			}
+		}
+
+		// 1 . file initialization
+		File file = new File("/temp/tests/identities.tmp.txt");
+		FileWriter writer = null;
+		FileReader reader = null;
+		if (!file.exists()) {
+			// create the directory structure
+			file.getParentFile().mkdirs();
+			// create the file itself
+			try {
+				// "risky" operation
+				file.createNewFile();
+			} catch (IOException e) {
+				// if something bad happens we go in the catch block.
+				e.printStackTrace();
+			}
+		}
+		try {
+			writer = new FileWriter(file);
+			reader = new FileReader(file);
+		} catch (IOException e) {
+			// TODO : improve so that the code is more readable (avoid a second
+			// try-catch)
+			e.printStackTrace();
+		}
+		if (writer == null || reader == null) {
+			// we were not able to open the file in write mode.
+			// TODO be sure to notify the user
+			return;
+		}
+
+		PrintWriter printer = new PrintWriter(writer);
+		for (Identity tobeSaved : results) {
+			printer.println("--- Identity ---");
+			printer.println(tobeSaved.getUid());
+			printer.println(tobeSaved.getDisplayName());
+			printer.println(tobeSaved.getEmail());
+			printer.println("--- Identity ---");
+
+		}
+		// commit the buffer in the real file
+		printer.flush();
+		
+		this.printer.close();
+		this.scanner.close();
+		
+		File oldFile = new File("/temp/tests/identities.txt");
+		Files.delete(oldFile.toPath());
+		Files.move(file.toPath(), oldFile.toPath(), null);
+
+		//TODO make the initialization again
+		// 1 . file initialization
+		oldFile = new File("/temp/tests/identities.txt");
+		writer = null;
+		reader = null;
+		if (!file.exists()) {
+			// create the directory structure
+			file.getParentFile().mkdirs();
+			// create the file itself
+			try {
+				// "risky" operation
+				file.createNewFile();
+			} catch (IOException e) {
+				// if something bad happens we go in the catch block.
+				e.printStackTrace();
+			}
+		}
+		try {
+			writer = new FileWriter(file);
+			reader = new FileReader(file);
+		} catch (IOException e) {
+			// TODO : improve so that the code is more readable (avoid a second
+			// try-catch)
+			e.printStackTrace();
+		}
+		if (writer == null || reader == null) {
+			// we were not able to open the file in write mode.
+			// TODO be sure to notify the user
+			return;
+		}
+		this.printer = new PrintWriter(writer);
+		this.scanner = new Scanner(reader);
+		
 	}
 
 	@Deprecated
