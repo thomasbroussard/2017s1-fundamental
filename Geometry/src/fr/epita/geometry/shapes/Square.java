@@ -8,23 +8,51 @@ package fr.epita.geometry.shapes;
  *
  */
 public class Square implements Shape {
+	
+	private double side;
+
+	/**
+	 * @return the side
+	 */
+	public double getSide() {
+		return side;
+	}
+
+	/**
+	 * @param side the side to set
+	 */
+	public void setSide(double side) {
+		this.side = side;
+	}
+
+	/**
+	 * @param side
+	 */
+	public Square(double side) {
+		this.side = side;
+	}
 
 	/* (non-Javadoc)
 	 * @see fr.epita.geometry.shapes.Shape#calculateArea()
 	 */
 	@Override
 	public double calculateArea() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.side * this.side;
 	}
+	
+	
 
 	/* (non-Javadoc)
 	 * @see fr.epita.geometry.shapes.Shape#calculatePerimeter()
 	 */
 	@Override
 	public double calculatePerimeter() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.side * 4;
 	}
+	
+	
+	
+	
+	
 
 }
