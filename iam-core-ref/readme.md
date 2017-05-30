@@ -1,3 +1,7 @@
+#TODO (30/05/2017)
+use the datasource explorer to manipulate databases
+
+
 #TODO (25/04/2017)
 - complete the search method (from FileIdentityDAO), and fix the scanner position reset
 - integrate the FileIdentityDAO in the Launcher class
