@@ -1,3 +1,8 @@
+#TODO (31/05/2017)
+- review all the lectures (quiz preparation)
+- 
+
+
 #TODO (30/05/2017)
 use the datasource explorer to manipulate databases
 
