@@ -1,6 +1,9 @@
+#TODO (13/06/2017)
+- complete the launcher to match the end-of-lecture state.
+
 #TODO (31/05/2017)
 - review all the lectures (quiz preparation)
-- 
+
 
 
 #TODO (30/05/2017)
