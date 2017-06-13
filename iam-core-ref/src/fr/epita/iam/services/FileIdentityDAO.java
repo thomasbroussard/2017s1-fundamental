@@ -16,6 +16,7 @@ import java.util.Scanner;
 
 import fr.epita.iam.datamodel.Identity;
 import fr.epita.iam.exceptions.DaoSaveException;
+import fr.epita.iam.exceptions.DaoUpdateException;
 
 /**
  * DAO : Data Access Object, here to manage Identities
@@ -126,8 +127,9 @@ public class FileIdentityDAO implements IdentityDAO {
 	}
 
 	@Deprecated
-	public void update(Identity identity) throws IOException {
+	public void update(Identity identity) throws DaoUpdateException {
 		ArrayList<Identity> results = new ArrayList<Identity>();
+		try{
 		while (this.scanner.hasNext()) {
 
 			this.scanner.nextLine();
@@ -226,6 +228,12 @@ public class FileIdentityDAO implements IdentityDAO {
 		}
 		this.printer = new PrintWriter(writer);
 		this.scanner = new Scanner(reader);
+		
+		}catch(Exception e){
+			DaoUpdateException exception = new DaoUpdateException();
+			exception.initCause(e);
+			throw exception;
+		}
 
 	}
 

@@ -6,7 +6,10 @@ package fr.epita.iam.launcher;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+import fr.epita.iam.datamodel.Identity;
+import fr.epita.iam.exceptions.DaoSaveException;
 import fr.epita.iam.services.Authenticator;
+import fr.epita.iam.services.FileIdentityDAO;
 import fr.epita.iam.services.IdentityDAO;
 import fr.epita.logging.LogConfiguration;
 import fr.epita.logging.Logger;
@@ -23,7 +26,7 @@ public class Launcher {
 	 */
 	public static void main(String[] args) throws FileNotFoundException {
 
-		IdentityDAO dao;
+		IdentityDAO dao = new FileIdentityDAO();
 		
 		
 		LogConfiguration conf = new LogConfiguration("/tmp/application.log");
@@ -41,10 +44,11 @@ public class Launcher {
 			logger.log("unable to authenticate "  + userName);
 			return;
 		} else {
+			System.out.println("Successfully authenticated");
 			// We are authenticated
 			String answer = "";
 			while (!"4".equals(answer)) {
-				System.out.println("Successfully authenticated");
+			
 				System.out.println("1. Create Identity");
 				System.out.println("2. Update Identity");
 				System.out.println("3. Delete Identity");
@@ -59,7 +63,18 @@ public class Launcher {
 				case "1":
 					System.out.println("Identity Creation");
 					logger.log("selected the identity creation");
-					// Create Identity
+					System.out.println("please input the identity display name :");
+					String displayName  = scanner.nextLine();
+					System.out.println("identity email :");
+					String email = scanner.nextLine();
+					Identity identity = new Identity(displayName, null, email);
+					try {
+						dao.save(identity);
+						System.out.println("the save operation completed successfully");
+					} catch (DaoSaveException e) {
+						System.out.println("the save operation is not able to complete, details :" + e.getMessage());
+					}
+					
 					break;
 				case "2":
 

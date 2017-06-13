@@ -3,6 +3,8 @@
  */
 package fr.epita.iam.datamodel;
 
+import java.util.UUID;
+
 /**
  * @author tbrou
  *
@@ -21,7 +23,7 @@ public class Identity {
 	 */
 	public Identity(String displayName, String uid, String email) {
 		this.displayName = displayName;
-		this.uid = uid;
+		this.uid = UUID.randomUUID().toString();
 		this.email = email;
 	}
 	

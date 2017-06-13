@@ -13,6 +13,7 @@ import java.util.List;
 
 import fr.epita.iam.datamodel.Identity;
 import fr.epita.iam.exceptions.DaoSaveException;
+import fr.epita.iam.exceptions.DaoSearchException;
 
 /**
  * 
@@ -58,20 +59,25 @@ public class JDBCIdentityDAO implements IdentityDAO {
 			throw exception;
 		}
 	}
-	
-	
 
-	public List<Identity> search(Identity criteria) throws SQLException {
-		PreparedStatement preparedStatement = this.connection.prepareStatement("SELECT * from IDENTITIES where ...");
-		ResultSet results = preparedStatement.executeQuery();
-
+	public List<Identity> search(Identity criteria) throws DaoSearchException {
 		List<Identity> returnedList = new ArrayList<Identity>();
+		try {
+			PreparedStatement preparedStatement = this.connection
+					.prepareStatement("SELECT * from IDENTITIES where ...");
 
-		while (results.next()) {
-			String displayName = results.getString("IDENTITY_DISPLAYNAME");
-			String email = results.getString("IDENTITY_EMAIL");
-			returnedList.add(new Identity(displayName, null, email));
+			ResultSet results = preparedStatement.executeQuery();
 
+			while (results.next()) {
+				String displayName = results.getString("IDENTITY_DISPLAYNAME");
+				String email = results.getString("IDENTITY_EMAIL");
+				returnedList.add(new Identity(displayName, null, email));
+
+			}
+		} catch (SQLException sqle) {
+			DaoSearchException daose = new DaoSearchException();
+			daose.initCause(sqle);
+			throw daose;
 		}
 
 		return returnedList;
