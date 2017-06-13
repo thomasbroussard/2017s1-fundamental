@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import fr.epita.iam.datamodel.Identity;
+import fr.epita.iam.exceptions.DaoSaveException;
 
 /**
  * DAO : Data Access Object, here to manage Identities
@@ -22,7 +23,7 @@ import fr.epita.iam.datamodel.Identity;
  * @author tbrou
  * 
  */
-public class FileIdentityDAO {
+public class FileIdentityDAO implements IdentityDAO {
 
 	private PrintWriter printer;
 	private Scanner scanner;
@@ -80,7 +81,7 @@ public class FileIdentityDAO {
 	 * @param identity
 	 *            the identity to record
 	 */
-	public void save(Identity identity) {
+	public void save(Identity identity) throws DaoSaveException {
 
 		this.printer.println("--- Identity ---");
 		this.printer.println(identity.getUid());
@@ -185,15 +186,15 @@ public class FileIdentityDAO {
 		}
 		// commit the buffer in the real file
 		printer.flush();
-		
+
 		this.printer.close();
 		this.scanner.close();
-		
+
 		File oldFile = new File("/temp/tests/identities.txt");
 		Files.delete(oldFile.toPath());
 		Files.move(file.toPath(), oldFile.toPath(), null);
 
-		//TODO make the initialization again
+		// TODO make the initialization again
 		// 1 . file initialization
 		oldFile = new File("/temp/tests/identities.txt");
 		writer = null;
@@ -225,11 +226,23 @@ public class FileIdentityDAO {
 		}
 		this.printer = new PrintWriter(writer);
 		this.scanner = new Scanner(reader);
-		
+
 	}
 
 	@Deprecated
 	public void delete(Identity identity) {
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see fr.epita.iam.services.IdentityDAO#releaseResources()
+	 */
+	@Override
+	public void releaseResources() {
+		this.printer.close();
+		this.scanner.close();
 
 	}
 

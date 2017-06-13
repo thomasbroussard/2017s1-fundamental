@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 import fr.epita.iam.services.Authenticator;
+import fr.epita.iam.services.IdentityDAO;
 import fr.epita.logging.LogConfiguration;
 import fr.epita.logging.Logger;
 
@@ -22,6 +23,9 @@ public class Launcher {
 	 */
 	public static void main(String[] args) throws FileNotFoundException {
 
+		IdentityDAO dao;
+		
+		
 		LogConfiguration conf = new LogConfiguration("/tmp/application.log");
 		Logger logger = new Logger(conf);
 		

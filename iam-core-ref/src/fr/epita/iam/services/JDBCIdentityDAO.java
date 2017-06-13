@@ -12,44 +12,104 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.epita.iam.datamodel.Identity;
+import fr.epita.iam.exceptions.DaoSaveException;
 
 /**
+ * 
+ * This is a class that contains all the database operations for the class
+ * Identity
+ * 
+ * <pre>
+ *  JDBCIdentityDAO dao = new JDBCIdentityDAO();
+ *  // save an identity
+ *  dao.save(new Identity(...));
+ *  
+ *  //search with an example criteria (qbe)  
+ *  dao.search(new Identity(...);
+ * </pre>
+ * 
+ * <b>warning</b> this class is dealing with database connections, so beware to
+ * release it through the {@link #releaseResources()}
+ * 
  * @author tbrou
  *
  */
-public class JDBCIdentityDAO {
-	
+public class JDBCIdentityDAO implements IdentityDAO {
+
 	Connection connection;
-	
+
 	/**
-	 * @throws SQLException 
+	 * @throws SQLException
 	 * 
 	 */
 	public JDBCIdentityDAO() throws SQLException {
 		this.connection = DriverManager.getConnection("");
 	}
 
-	
-	public void save(Identity identity) throws SQLException{
-		PreparedStatement preparedStatement = this.connection.prepareStatement("INSERT....");
-		preparedStatement.setString(1, identity.getDisplayName());
-		preparedStatement.execute();
+	public void save(Identity identity) throws DaoSaveException {
+		try {
+			PreparedStatement preparedStatement = this.connection.prepareStatement("INSERT....");
+			preparedStatement.setString(1, identity.getDisplayName());
+			preparedStatement.execute();
+		} catch (SQLException sqle) {
+			DaoSaveException exception = new DaoSaveException();
+			exception.initCause(sqle);
+			throw exception;
+		}
 	}
 	
-	public List<Identity> search(Identity criteria) throws SQLException{
+	
+
+	public List<Identity> search(Identity criteria) throws SQLException {
 		PreparedStatement preparedStatement = this.connection.prepareStatement("SELECT * from IDENTITIES where ...");
 		ResultSet results = preparedStatement.executeQuery();
-		
+
 		List<Identity> returnedList = new ArrayList<Identity>();
 
-		while (results.next()){
+		while (results.next()) {
 			String displayName = results.getString("IDENTITY_DISPLAYNAME");
 			String email = results.getString("IDENTITY_EMAIL");
-			
 			returnedList.add(new Identity(displayName, null, email));
-			
+
 		}
-		
+
 		return returnedList;
+	}
+
+	/**
+	 * this is releasing the database connection, so you should not use this
+	 * instance of DAO anymore
+	 */
+	public void releaseResources() {
+		try {
+			this.connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * fr.epita.iam.services.IdentityDAO#update(fr.epita.iam.datamodel.Identity)
+	 */
+	@Override
+	public void update(Identity identity) {
+		// TODO Auto-generated method stub
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * fr.epita.iam.services.IdentityDAO#delete(fr.epita.iam.datamodel.Identity)
+	 */
+	@Override
+	public void delete(Identity identity) {
+		// TODO Auto-generated method stub
+
 	}
 }
