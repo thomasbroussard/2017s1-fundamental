@@ -54,6 +54,7 @@ public class JDBCIdentityDAO implements IdentityDAO {
 		} catch (SQLException sqle) {
 			DaoSaveException exception = new DaoSaveException();
 			exception.initCause(sqle);
+			exception.setFaultObject(identity);
 			throw exception;
 		}
 	}
