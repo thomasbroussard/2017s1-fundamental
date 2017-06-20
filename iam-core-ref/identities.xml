@@ -1,0 +1,24 @@
+<identities>
+	<identity>
+		<property name="displayName">
+			Thomas Broussard
+		</property>
+		<property name="email">
+			tbr@tbr.com
+		</property>
+		<property name="uid">
+			1
+		</property>
+	</identity>
+	<identity>
+		<property name="displayName">
+			Clément Serrano
+		</property>
+		<property name="email">
+			cserr@cserr.com
+		</property>
+		<property name="uid">
+			2
+		</property>
+	</identity>
+</identities>
